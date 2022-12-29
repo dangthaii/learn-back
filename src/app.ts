@@ -1,3 +1,4 @@
+import "dotenv/config";
 import Route from "core/routes.interface";
 import express from "express";
 import mongoose from "mongoose";
@@ -28,8 +29,11 @@ export default class App {
 
   private async connectToDatabase() {
     try {
-      const connectString =
-        "mongodb+srv://admin:123abc@master.owash8r.mongodb.net/?retryWrites=true&w=majority";
+      const connectString = process.env.MONGODB_URI;
+      if (!connectString) {
+        console.log("It seem's you miss connectString in .env file");
+        return;
+      }
       await mongoose.connect(connectString);
       console.log("Connect to database successfully");
     } catch (error) {
