@@ -1,7 +1,8 @@
 import "dotenv/config";
-import Route from "core/routes.interface";
+import { Route } from "core/interfaces";
 import express from "express";
 import mongoose from "mongoose";
+import { Logger } from "core/utils";
 
 export default class App {
   public app: express.Application;
@@ -17,7 +18,7 @@ export default class App {
 
   public listen() {
     this.app.listen(this.port, () => {
-      console.log(`Server is running at ${this.port}`);
+      Logger.info(`Server is running at ${this.port}`);
     });
   }
 
@@ -31,13 +32,13 @@ export default class App {
     try {
       const connectString = process.env.MONGODB_URI;
       if (!connectString) {
-        console.log("It seem's you miss connectString in .env file");
+        Logger.error("It seem's you miss connectString in .env file");
         return;
       }
       await mongoose.connect(connectString);
-      console.log("Connect to database successfully");
+      Logger.info("Connect to database successfully");
     } catch (error) {
-      console.log("Connect to database failed");
+      Logger.error("Connect to database failed");
     }
   }
 }
